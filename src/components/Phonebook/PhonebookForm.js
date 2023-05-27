@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 import css from './Phonebook.module.css';
+import { addContact } from '../../redux/contactsSlice';
 
 const INITIAL_STATE = {
   name: '',
   number: '',
 };
 
-const PhonebookForm = ({ onSubmit }) => {
+const PhonebookForm = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({ ...INITIAL_STATE });
 
   const handleChange = e => {
@@ -19,8 +22,11 @@ const PhonebookForm = ({ onSubmit }) => {
   const handleSubmit = e => {
     e.preventDefault();
     const { name, number } = formData;
+    if (name.trim() === '') {
+      return;
+    }
     const contact = { id: nanoid(), name, number };
-    onSubmit(contact);
+    dispatch(addContact(contact));
     reset();
   };
 
