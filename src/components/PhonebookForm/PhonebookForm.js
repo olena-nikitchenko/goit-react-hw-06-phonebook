@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
-import css from './Phonebook.module.css';
 import { addContact } from '../../redux/contactsSlice';
+import { getContactValue } from '../../redux/contactsSlice.js';
+import css from './Phonebook.module.css';
 
 const INITIAL_STATE = {
   name: '',
@@ -12,7 +12,8 @@ const INITIAL_STATE = {
 
 const PhonebookForm = () => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({ ...INITIAL_STATE });
+  const contacts = useSelector(getContactValue);
+  const [formData, setFormData] = useState(INITIAL_STATE);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -22,11 +23,16 @@ const PhonebookForm = () => {
   const handleSubmit = e => {
     e.preventDefault();
     const { name, number } = formData;
-    if (name.trim() === '') {
-      return;
+    const isExistingContact = contacts.some(
+      contact => contact.name === name && contact.number === number
+    );
+    if (isExistingContact) {
+      alert(`${name} is already in contacts`);
+    } else {
+      const newContact = { id: nanoid(), name, number };
+      dispatch(addContact(newContact));
     }
-    const contact = { id: nanoid(), name, number };
-    dispatch(addContact(contact));
+
     reset();
   };
 
@@ -44,6 +50,8 @@ const PhonebookForm = () => {
           type="text"
           placeholder="Enter name"
           name="name"
+          pattern="[A-Za-z\s]+"
+          required
           value={name}
           onChange={handleChange}
           className={css.Input}
@@ -53,6 +61,7 @@ const PhonebookForm = () => {
         Number
         <input
           type="tel"
+          placeholder="Enter number"
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
@@ -67,10 +76,6 @@ const PhonebookForm = () => {
       </button>
     </form>
   );
-};
-
-PhonebookForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default PhonebookForm;

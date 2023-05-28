@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import css from './Phonebook.module.css';
+import css from './Section.module.css';
 
 const Section = ({ title, children }) => (
   <div className={css.Phonebook}>
