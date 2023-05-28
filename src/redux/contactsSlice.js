@@ -9,16 +9,7 @@ const contactsSlice = createSlice({
   },
   reducers: {
     addContact(state, action) {
-      const { name, number } = action.payload;
-      const existingContact = state.contacts.find(
-        contact => contact.name === name && contact.number === number
-      );
-
-      if (!existingContact) {
-        state.contacts.push(action.payload);
-      } else {
-        alert('Such contact already exists!');
-      }
+      state.contacts.push(action.payload);
     },
     deleteContact(state, action) {
       state.contacts = state.contacts.filter(

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setStatusFilter, getFilterValue } from '../../redux/filterSlice';
-import css from './Phonebook.module.css';
+import css from './Filter.module.css';
 
 const Filter = () => {
   const dispatch = useDispatch();
