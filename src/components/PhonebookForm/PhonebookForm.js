@@ -28,10 +28,10 @@ const PhonebookForm = () => {
     );
     if (isExistingContact) {
       alert(`${name} is already in contacts`);
-    } else {
-      const newContact = { id: nanoid(), name, number };
-      dispatch(addContact(newContact));
+      return;
     }
+    const newContact = { id: nanoid(), name, number };
+    dispatch(addContact(newContact));
 
     reset();
   };
